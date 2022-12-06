@@ -12,17 +12,34 @@ public class Main {
         main.run();
     }
 
-    record Round(String opponent, String you) {
+    record Round(String opponent, String expectedResult) {
 
         Long overallScore() {
             return matchScore() + yourScore();
         }
 
         Long yourScore() {
-            return switch (you) {
-                case "X" -> 1L;
-                case "Y" -> 2L;
-                case "Z" -> 3L;
+            Long opponentScore = opponentScore();
+            return switch (expectedResult) {
+                case "Y" -> opponentScore;
+                case "X" -> {
+                    if (opponentScore == 1L) {
+                        yield  3L;
+                    }
+                    if (opponentScore == 2L) {
+                        yield  1L;
+                    }
+                    yield 2L;
+                }
+                case "Z" -> {
+                    if (opponentScore == 1L) {
+                        yield  2L;
+                    }
+                    if (opponentScore == 2L) {
+                        yield  3L;
+                    }
+                    yield 1L;
+                }
                 default -> throw new UnsupportedOperationException();
             };
         }
@@ -55,7 +72,7 @@ public class Main {
         }
     }
 
-    final String path = "/Users/kevinwallis/projects/AdventOfCode-02/AdventOfCode-02/src/main/resources/";
+    final String path = "TODO";
 
     List<Round> rounds = new ArrayList<>();
 
